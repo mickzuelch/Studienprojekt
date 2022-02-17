@@ -1,0 +1,13 @@
+100_euro
+50_euro
+20_euro
+10_euro
+5_euro
+2_euro
+1_euro
+50_cent
+20_cent
+10_cent
+5_cent
+2_cent
+1_cent
