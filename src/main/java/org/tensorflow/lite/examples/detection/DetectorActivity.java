@@ -85,6 +85,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
     private BorderedText borderedText;
 
+    static String printValue = "";
+
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation) {
         final float textSizePx =
@@ -155,6 +157,12 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         tracker.setFrameConfiguration(previewWidth, previewHeight, sensorOrientation);
     }
 
+    private int getValue(int detectedClass)
+    {
+        int classvalues[] = {100 , 50, 20 ,10 ,5 ,2, 1, 50 ,20 , 10 ,5, 2 ,1 };
+        return classvalues[detectedClass];
+    }
+
     @Override
     protected void processImage() {
         ++timestamp;
@@ -197,6 +205,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                         paint.setColor(Color.RED);
                         paint.setStyle(Style.STROKE);
                         paint.setStrokeWidth(2.0f);
+                        int euros = 0;
+                        int cents = 0;
+
 
                         float minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
                         switch (MODE) {
@@ -217,9 +228,28 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
                                 result.setLocation(location);
                                 mappedRecognitions.add(result);
+
+                                if(result.getDetectedClass() < 7)
+                                    euros += getValue(result.getDetectedClass());
+                                else {
+                                    cents += getValue(result.getDetectedClass());
+                                    if (cents > 100)
+                                    {
+                                        euros += (cents / 100);
+                                        cents = cents%100;
+                                    }
+                                }
                             }
                         }
+                        String value = "";
+                        if(cents < 10)
+                            value = euros + ",0" + cents + " Euro";
+                        else
+                            value = euros + "," + cents + " Euro";
 
+                        LOGGER.i("Value of Money: " + value);
+                        final String Fvalue = value;
+                        printValue = value;
                         tracker.trackResults(mappedRecognitions, currTimestamp);
                         trackingOverlay.postInvalidate();
 
@@ -231,11 +261,17 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                                     public void run() {
                                         showFrameInfo(previewWidth + "x" + previewHeight);
                                         showCropInfo(cropCopyBitmap.getWidth() + "x" + cropCopyBitmap.getHeight());
-                                        showInference(lastProcessingTimeMs + "ms");
+                                        showInference(lastProcessingTimeMs + "ms"
+                                            + "\n Detected Money: " + Fvalue);
                                     }
                                 });
                     }
                 });
+        final Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.RED);
+        paint.setTextSize(20);
+        canvas.drawText(printValue, 70,120, paint);
     }
 
     @Override

@@ -135,12 +135,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private int getValue(int detectedClass)
+    {
+        int classvalues[] = {100 , 50, 20 ,10 ,5 ,2, 1, 50 ,20 , 10 ,5, 2 ,1 };
+        System.out.println("class: " + detectedClass);
+        return classvalues[detectedClass];
+    }
+
     private void handleResult(Bitmap bitmap, List<Classifier.Recognition> results) {
         final Canvas canvas = new Canvas(bitmap);
         final Paint paint = new Paint();
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(2.0f);
+        int euros = 0;
+        int cents = 0;
 
         final List<Classifier.Recognition> mappedRecognitions =
                 new LinkedList<Classifier.Recognition>();
@@ -149,6 +158,16 @@ public class MainActivity extends AppCompatActivity {
             final RectF location = result.getLocation();
             if (location != null && result.getConfidence() >= MINIMUM_CONFIDENCE_TF_OD_API) {
                 canvas.drawRect(location, paint);
+                if(result.getDetectedClass() < 7)
+                    euros += getValue(result.getDetectedClass());
+                else {
+                    cents += getValue(result.getDetectedClass());
+                    if (cents > 100)
+                    {
+                        euros += (cents / 100);
+                        cents = cents%100;
+                    }
+                }
 //                cropToFrameTransform.mapRect(location);
 //
 //                result.setLocation(location);
@@ -157,6 +176,15 @@ public class MainActivity extends AppCompatActivity {
         }
 //        tracker.trackResults(mappedRecognitions, new Random().nextInt());
 //        trackingOverlay.postInvalidate();
+        String value = "";
+        if(cents < 10)
+             value = euros + ",0" + cents + " Euro";
+        else
+             value = euros + "," + cents + " Euro";
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(20);
+        canvas.drawText(value, 100,20, paint);
         imageView.setImageBitmap(bitmap);
     }
 }
