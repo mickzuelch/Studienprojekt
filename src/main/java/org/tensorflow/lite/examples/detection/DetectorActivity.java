@@ -263,6 +263,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                                         showCropInfo(cropCopyBitmap.getWidth() + "x" + cropCopyBitmap.getHeight());
                                         showInference(lastProcessingTimeMs + "ms"
                                             + "\n Detected Money: " + Fvalue);
+                                        showMoneyValue("Detected Money:\n" + Fvalue);
                                     }
                                 });
                     }
