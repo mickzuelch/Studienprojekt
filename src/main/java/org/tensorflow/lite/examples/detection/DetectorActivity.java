@@ -254,15 +254,11 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                         trackingOverlay.postInvalidate();
 
                         computingDetection = false;
-
+                        //showMoneyValue("Detected Money:\n" + Fvalue);
                         runOnUiThread(
                                 new Runnable() {
                                     @Override
                                     public void run() {
-                                        showFrameInfo(previewWidth + "x" + previewHeight);
-                                        showCropInfo(cropCopyBitmap.getWidth() + "x" + cropCopyBitmap.getHeight());
-                                        showInference(lastProcessingTimeMs + "ms"
-                                            + "\n Detected Money: " + Fvalue);
                                         showMoneyValue("Detected Money:\n" + Fvalue);
                                     }
                                 });

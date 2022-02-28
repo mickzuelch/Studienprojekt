@@ -32,20 +32,32 @@
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="638dp"
             tools:context="org.tensorflow.demo.CameraActivity">
 
         </FrameLayout>
 
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="225dp"
+            android:layout_height="87dp"
+            android:layout_below="@+id/container"
+            android:layout_marginTop="1dp"
+            tools:text="Save" />
+
+        <TextView
+            android:id="@+id/MoneyValue"
+            android:layout_width="182dp"
+            android:layout_height="79dp"
+            android:layout_alignTop="@+id/saveButton"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="4dp"
+            android:layout_toEndOf="@+id/saveButton" />
+
     </RelativeLayout>
-
-    <include
-        android:id="@+id/bottom_sheet_layout"
-        layout="@layout/tfe_od_layout_bottom_sheet" />
-
-    <TextView
-        android:id="@+id/MoneyValue"
-        android:layout_width="170dp"
-        android:layout_height="54dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
